@@ -4,19 +4,18 @@
   <title>Ejercicio con WebWorkers</title>
 
   <script>
+var worker;
+
 function buscarPrimos() {
-  var n = 1;
-  primelist = "";
-  search: while (n<parseInt(document.getElementById("formulario").input.value)) {
-    n += 1;
-    for (var i = 2; i <= Math.sqrt(n); i += 1)
-      if (n % i == 0)
-        continue search;
-    // found a prime!
-    primelist += " " + n;
-    document.getElementById('result').innerHTML = primelist;
-  }
+    document.getElementById("result").innerHTML = "";
+    worker = new Worker("workerPrimos.js");
+    worker.postMessage(parseInt(document.getElementById("formulario").input.value));
+    worker.onmessage = function(event) {
+      var a = document.getElementById("result").innerHTML;
+      document.getElementById("result").innerHTML = a + event.data;
+    };
 }
+
   </script>
 
 
